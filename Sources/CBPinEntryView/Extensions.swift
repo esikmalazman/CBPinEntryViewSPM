@@ -9,10 +9,14 @@
 import UIKit
 import Foundation
 import AVFoundation
-//import MBProgressHUD
+import MBProgressHUD
 import MapKit
 import Photos
 
+struct CBPinEntryViewGlobal {
+    static let SCREEN_HEIGHT = UIScreen.main.bounds.height
+    static let SCREEN_WIDTH = UIScreen.main.bounds.width
+}
 extension UIImage {
     
     func filled(with color: UIColor) -> UIImage {
@@ -210,7 +214,7 @@ extension StringProtocol where Index == String.Index {
     }
     
     convenience init (hex:String) {
-        var cString:String = hex.trim().uppercased()
+        var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
         if (cString.hasPrefix("#")) {
             cString = (cString as NSString).substring(from: 1)
@@ -701,11 +705,11 @@ extension UIView {
     
     func openFromBottom(_ bgColor: UIColor?, duration: TimeInterval = 0.35, completion: ((Bool) -> Void)? = nil) {
         
-        self.frame = CGRect(x: 0, y: SCREEN_HEIGHT, width: SCREEN_WIDTH, height: self.frame.size.height)
+        self.frame = CGRect(x: 0, y: CBPinEntryViewGlobal.SCREEN_HEIGHT, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
         UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [.curveEaseInOut, .allowUserInteraction],
                        /*UIView.animate(withDuration: duration,*/ animations: {
                         
-                        self.frame = CGRect(x: 0, y: SCREEN_HEIGHT - self.frame.size.height, width: SCREEN_WIDTH, height: self.frame.size.height)
+            self.frame = CGRect(x: 0, y: CBPinEntryViewGlobal.SCREEN_HEIGHT - self.frame.size.height, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
                         self.layoutIfNeeded()
                         
                        },completion:{ status in
@@ -718,13 +722,13 @@ extension UIView {
     
     func closeToBottom(_ bgColor: UIColor?, duration: TimeInterval = 0.35)
     {
-        self.frame = CGRect(x: 0, y: self.frame.origin.y, width: SCREEN_WIDTH, height: self.frame.size.height)
+        self.frame = CGRect(x: 0, y: self.frame.origin.y, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
         
         if bgColor != nil { self.backgroundColor = bgColor }
         UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 5, options: [.curveEaseInOut, .allowUserInteraction],
                        /*UIView.animate(withDuration: duration, */animations: {
                         
-                        self.frame = CGRect(x: 0, y: SCREEN_HEIGHT, width: SCREEN_WIDTH, height: self.frame.size.height)
+            self.frame = CGRect(x: 0, y: CBPinEntryViewGlobal.SCREEN_HEIGHT, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
                         self.layoutIfNeeded()
                        })
     }
@@ -736,16 +740,16 @@ extension UIView {
         
         UIView.animate(withDuration: 0.35, animations: {
             
-            self.frame = CGRect(x: 0, y: -SCREEN_HEIGHT + 10, width: SCREEN_WIDTH, height: self.frame.size.height)
+            self.frame = CGRect(x: 0, y: -CBPinEntryViewGlobal.SCREEN_HEIGHT + 10, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
             self.layoutIfNeeded()
         })
     }
     
     func openFromLeftWithBounce(_ bgColor: UIColor?) {
-        self.frame = CGRect(x: SCREEN_WIDTH, y: self.frame.origin.y, width: SCREEN_WIDTH, height: self.frame.size.height)
+        self.frame = CGRect(x: CBPinEntryViewGlobal.SCREEN_WIDTH, y: self.frame.origin.y, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
         
         UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-            self.frame = CGRect(x: 0, y: self.frame.origin.y, width: SCREEN_WIDTH, height: self.frame.size.height)
+            self.frame = CGRect(x: 0, y: self.frame.origin.y, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
             self.layoutIfNeeded()
         }) { _ in
             if bgColor != nil { self.backgroundColor = bgColor }
@@ -754,11 +758,11 @@ extension UIView {
     
     func openFromLeft(_ bgColor: UIColor?, duration: TimeInterval = 0.35, delay: TimeInterval = 0, completion: ((Bool) -> Void)? = nil) {
         
-        self.frame = CGRect(x: SCREEN_WIDTH, y: self.frame.origin.y, width: SCREEN_WIDTH, height: self.frame.size.height)
+        self.frame = CGRect(x: CBPinEntryViewGlobal.SCREEN_WIDTH, y: self.frame.origin.y, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
         self.layoutIfNeeded()
         UIView.animate(withDuration: duration, delay: delay, animations: {
             
-            self.frame = CGRect(x: 0, y: self.frame.origin.y, width: SCREEN_WIDTH, height: self.frame.size.height)
+            self.frame = CGRect(x: 0, y: self.frame.origin.y, width: CBPinEntryViewGlobal.SCREEN_WIDTH, height: self.frame.size.height)
             self.layoutIfNeeded()
             
         },completion:{ status in
@@ -777,7 +781,7 @@ extension UIView {
         
         UIView.animate(withDuration: 0.35, animations: {
             
-            self.frame = CGRect(x: SCREEN_WIDTH, y: self.frame.origin.y, width: self.frame.size.width, height: self.frame.size.height)
+            self.frame = CGRect(x: CBPinEntryViewGlobal.SCREEN_WIDTH, y: self.frame.origin.y, width: self.frame.size.width, height: self.frame.size.height)
             self.layoutIfNeeded()
         })
     }
@@ -796,12 +800,6 @@ extension UIView {
                             self.removeFromSuperview()
                         }
         })
-    }
-    
-    
-    func resizeByHeight(text:String, font:UIFont) {
-        
-        height = max(self.frame.size.height, text.heightWithConstrainedWidth(width: self.frame.size.width, font: font) + 2)
     }
     
     /// Get view's parent view controller
@@ -928,11 +926,6 @@ extension UIResponder {
 //MARK: - UIApplication
 
 extension UIApplication {
-    
-    class func getDelegate() -> AppDelegate {
-        return self.shared.delegate as! AppDelegate;
-    }
-    
     class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return topViewController(base: nav.visibleViewController)
@@ -1150,6 +1143,17 @@ extension UIViewController {
     }
 }
 
+extension String {
+    func nsRange(from range: Range<String.Index>) -> NSRange {
+        let utf16View = self.utf16
+        let start = range.lowerBound.samePosition(in: utf16View)!
+        let end = range.upperBound.samePosition(in: utf16View)!
+        return NSRange(location: utf16View.distance(from: utf16View.startIndex, to: start),
+                       length: utf16View.distance(from: start, to: end))
+    }
+}
+
+
 //MARK: - NSMutableAttributedString
 
 public extension NSMutableAttributedString {
@@ -1338,24 +1342,6 @@ extension Array where Element: Equatable
      
      self = objGroupList as! Array<Element>
      }*/
-    
-    mutating func groupList(UsingKey key: String, Tiles: [String]) {
-        
-        var objGroupList: [JSON] = [JSON]()
-        
-        for title in Tiles {
-            
-            let templist = (self as! [JSON]).filter{$0[key].stringValue == title}
-            
-            objGroupList.append([
-                key:title,
-                "isopen":"0",
-                "list":templist
-            ])
-        }
-        
-        self = objGroupList as! Array<Element>
-    }
 }
 
 //MARK: - UITableView
