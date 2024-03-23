@@ -12,7 +12,7 @@ let package = Package(
     
     dependencies: [
         .package(url: "https://github.com/jdg/MBProgressHUD.git", from: "1.2.0"),
-        .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "6.5.6")
+        .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "7.0.2")
     ],
     targets: [
         .target(
