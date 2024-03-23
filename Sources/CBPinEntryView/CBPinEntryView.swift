@@ -270,7 +270,7 @@ public protocol CBPinEntryViewDelegate: AnyObject {
         
         textField.becomeFirstResponder()
         
-        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+        IQKeyboardManager.shared.resignOnTouchOutside = true
     }
 
     open func setError(isError: Bool) {
@@ -356,7 +356,7 @@ public protocol CBPinEntryViewDelegate: AnyObject {
         
         setError(isError: false)
         
-        IQKeyboardManager.shared.shouldResignOnTouchOutside = false
+        IQKeyboardManager.shared.resignOnTouchOutside = false
         
         return textField.resignFirstResponder()
     }
